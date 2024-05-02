@@ -24,6 +24,7 @@ try
         Console.WriteLine("3) Display Category and related products");
         Console.WriteLine("4) Display all Categories and their related products");
         Console.WriteLine("5) Display Products");
+        Console.WriteLine("6) Search for a Product");
         Console.WriteLine("\"q\" to quit");
         choice = Console.ReadLine();
         Console.Clear();
@@ -140,6 +141,30 @@ try
             }
             Console.ForegroundColor = ConsoleColor.White;
         }
+        else if (choice == "6")
+        {
+            Console.WriteLine("Enter the product name:");
+            string productName = Console.ReadLine();
+
+            var product = db.Products.Where(p => p.ProductName.Contains(productName)).OrderBy(p => p.ProductName);
+
+            if (product == null || !product.Any())
+            {
+                Console.WriteLine("No records found");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"{product.Count()} records returned");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                foreach (var item in product)
+                {
+                    Console.WriteLine($"{item.ProductName} - {(item.Discontinued ? "Discontinued" : "Active")}");
+                }
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        }
+            
         Console.WriteLine();
     } while (choice.ToLower() != "q");
 }
