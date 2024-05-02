@@ -23,6 +23,7 @@ try
         Console.WriteLine("2) Add Category");
         Console.WriteLine("3) Display Category and related products");
         Console.WriteLine("4) Display all Categories and their related products");
+        Console.WriteLine("5) Display Products");
         Console.WriteLine("\"q\" to quit");
         choice = Console.ReadLine();
         Console.Clear();
@@ -108,6 +109,36 @@ try
                     Console.WriteLine($"\t{p.ProductName}");
                 }
             }
+        }
+        else if (choice == "5")
+        {
+            Console.WriteLine("Which products would you like to see? (all/discontinued/active)");
+            string productType = Console.ReadLine().ToLower();
+
+            IQueryable<Product> products;
+
+            switch (productType)
+            {
+                case "discontinued":
+                    products = db.Products.Where(p => p.Discontinued).OrderBy(p => p.ProductName);
+                    break;
+                case "active":
+                    products = db.Products.Where(p => !p.Discontinued).OrderBy(p => p.ProductName);
+                    break;
+                case "all":    
+                default:
+                    products = db.Products.OrderBy(p => p.ProductName);
+                    break;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"{products.Count()} records returned");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            foreach (var item in products)
+            {
+                Console.WriteLine($"{item.ProductName} - {(item.Discontinued ? "Discontinued" : "Active")}");
+            }
+            Console.ForegroundColor = ConsoleColor.White;
         }
         Console.WriteLine();
     } while (choice.ToLower() != "q");
