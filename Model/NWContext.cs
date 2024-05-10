@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
@@ -158,6 +159,55 @@ namespace Northwind_Console.Model
             }
             
             this.SaveChanges();
+        }
+
+        public void DeleteProduct(int productId)
+        {
+            Product product = this.Products.Find(productId);
+            if (product == null)
+            {
+                Console.WriteLine("Product not found.");
+                return;
+            }
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Are you sure you want to delete {product.ProductName}? (yes/no)");
+            string confirmation = Console.ReadLine();
+
+            if (confirmation.ToLower() == "yes")
+            {
+                this.Products.Remove(product);
+                this.SaveChanges();  
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"{product.ProductName} deleted successfully.");
+            }
+            else{
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("No changes were made.");
+            }
+
+            Console.ResetColor();
+        }
+
+        public void DisplayProductsByCategory(){
+            var categories = this.Categories.Include(c => c.Products).ToList();
+
+            if (!categories.Any())
+            {
+                Console.WriteLine("No categories found.");
+                return;
+            }
+
+            foreach (var category in categories)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"Category: {category.CategoryName}");
+                foreach (var product in category.Products)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.WriteLine($"ID: {product.ProductId}, Name: {product.ProductName}, Active:  {(!product.Discontinued ? "Yes" : "No")}");
+                }
+                Console.ResetColor();
+            }
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

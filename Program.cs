@@ -29,6 +29,7 @@ try
         Console.WriteLine("8) Search for a Product");
         Console.WriteLine("9) Add Product");
         Console.WriteLine("10) Edit Product");
+        Console.WriteLine("11) Delete Product");
         Console.WriteLine("\"q\" to quit");
         choice = Console.ReadLine();
         Console.Clear();
@@ -163,16 +164,8 @@ try
         }
         else if (choice == "6")
         {
-            var query = db.Categories.Include("Products").OrderBy(p => p.CategoryId);
-            foreach (var item in query)
-            {
-                Console.WriteLine($"{item.CategoryName}");
-                foreach (Product p in item.Products)
-                {
-                    Console.WriteLine($"\t{p.ProductName}");
-                }
-            }
-            continue;
+           db.DisplayProductsByCategory();
+              continue;
         }
         else if (choice == "7")
         {
@@ -325,6 +318,13 @@ try
                 logger.Info("Product updated - {ProductName}", productName);
             }
             continue;
+        }
+        else if (choice == "11")
+        {
+            db.DisplayProductsByCategory();
+            Console.WriteLine("Enter the ID of the product you want to delete:");
+            int id = int.Parse(Console.ReadLine());
+            db.DeleteProduct(id);
         }   
         Console.WriteLine();
     } while (choice.ToLower() != "q");
