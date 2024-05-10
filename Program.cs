@@ -27,6 +27,7 @@ try
         Console.WriteLine("6) Display Products");
         Console.WriteLine("7) Search for a Product");
         Console.WriteLine("8) Add Product");
+        Console.WriteLine("9) Edit Product");
         Console.WriteLine("\"q\" to quit");
         choice = Console.ReadLine();
         Console.Clear();
@@ -256,8 +257,62 @@ try
                 bool productAdded = db.AddProduct(productName, quantityPerUnit, unitPrice, unitsInStock, unitsOnOrder, reorderLevel, discontinued, categoryId);
                 if (productAdded)
                 {
-                    logger.Info($"Product added - {0}", productName);
+                    logger.Info("Product added - {ProductName}", productName);
                 }
+            }
+            continue;
+        }
+        else if (choice == "9")
+        {
+            Console.WriteLine("Enter the product name:");
+            string productName = Console.ReadLine();
+
+            var product = db.Products.FirstOrDefault(p => p.ProductName == productName);
+
+            if (product == null)
+            {
+                logger.Error("Product {0} not found", productName);
+            }
+            else
+            {
+                Console.WriteLine("Enter the Product Quantity Per Unit:");
+                string quantityPerUnit = Console.ReadLine();
+                Console.WriteLine("Enter the Product Unit Price:");
+                decimal unitPrice = decimal.Parse(Console.ReadLine());
+                Console.WriteLine("Enter the Product Units in Stock:");
+                short unitsInStock = short.Parse(Console.ReadLine());
+                Console.WriteLine("Enter the Product Units on Order:");
+                short unitsOnOrder = short.Parse(Console.ReadLine());
+                Console.WriteLine("Enter the Product Reorder Level:");
+                short reorderLevel = short.Parse(Console.ReadLine());
+                Console.WriteLine("Is the Product Discontinued? (y/n)");
+                bool discontinued = Console.ReadLine().ToLower() == "y";
+
+                Console.WriteLine("Select the Category for the Product:");
+                var query = db.Categories.OrderBy(p => p.CategoryId);
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                foreach (var item in query)
+                {
+                    Console.WriteLine($"{item.CategoryId}) {item.CategoryName}");
+                }
+                Console.ForegroundColor = ConsoleColor.White;
+                int categoryId = int.Parse(Console.ReadLine());
+
+
+                Product updatedProduct = new ()
+                {
+                    ProductId = product.ProductId,
+                    ProductName = productName,
+                    QuantityPerUnit = quantityPerUnit,
+                    UnitPrice = unitPrice,
+                    UnitsInStock = unitsInStock,
+                    UnitsOnOrder = unitsOnOrder,
+                    ReorderLevel = reorderLevel,
+                    Discontinued = discontinued,
+                    CategoryId = categoryId
+                };
+                db.EditProduct(updatedProduct);      
+                logger.Info("Product updated - {ProductName}", productName);
             }
             continue;
         }   

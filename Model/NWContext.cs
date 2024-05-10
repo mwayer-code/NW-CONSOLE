@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 
+
 namespace Northwind_Console.Model
 {
     public partial class NWContext : DbContext
@@ -60,6 +61,26 @@ namespace Northwind_Console.Model
             this.SaveChanges();
 
             return true;
+        }
+
+        public void EditProduct(Product UpdatedProduct)
+        {
+
+            Product product = this.Products.Find(UpdatedProduct.ProductId);
+
+            if (product != null)
+            {
+                product.ProductName = UpdatedProduct.ProductName;
+                product.QuantityPerUnit = UpdatedProduct.QuantityPerUnit;
+                product.UnitPrice = UpdatedProduct.UnitPrice;
+                product.UnitsInStock = UpdatedProduct.UnitsInStock;
+                product.UnitsOnOrder = UpdatedProduct.UnitsOnOrder;
+                product.ReorderLevel = UpdatedProduct.ReorderLevel;
+                product.Discontinued = UpdatedProduct.Discontinued;
+                product.CategoryId = UpdatedProduct.CategoryId;
+            }
+            
+            this.SaveChanges();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
