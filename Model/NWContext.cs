@@ -43,11 +43,13 @@ namespace Northwind_Console.Model
             Category category = this.Categories.Include(c => c.Products).FirstOrDefault(c => c.CategoryId == categoryId);
             if (category == null)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Category not found.");
                 return;
             }
             if (category.Products.Any())
             {
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("This category has related products. Please enter the ID of the category you want to reassign the products to, or enter 'delete' to delete the products:");
 
                 string input = Console.ReadLine();
@@ -63,31 +65,37 @@ namespace Northwind_Console.Model
                             {
                                 product.Category = newCategory;
                             }
+                            Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("Products reassigned to new category.");
                         }
                         else
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Category not found. No changes were made.");
                             return;
                         }
                     }
                     else
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid input. No changes were made.");
                         return;
                     }
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("You have chosen to delete the products. Are you sure? (yes/no)");
                     string confirmation = Console.ReadLine();
                     if (confirmation.ToLower() == "yes")
                     {
                         this.Products.RemoveRange(category.Products);
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Products deleted.");
                     }
                     else
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("No changes were made.");
                         return;
                     }
@@ -95,24 +103,30 @@ namespace Northwind_Console.Model
             }
             this.Categories.Remove(category);
             this.SaveChanges();
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Category deleted successfully.");
+            Console.ResetColor();
         }
 
         public void DisplayCategories()
-        {
+        {   
+            Console.ForegroundColor = ConsoleColor.Green;
             var categories = this.Categories.ToList();
 
             if (!categories.Any())
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("No categories found.");
                 return;
             }
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Categories:");
             foreach (var category in categories)
             {
                 Console.WriteLine($"ID: {category.CategoryId}, Name: {category.CategoryName}, Description: {category.Description}");
             }
+            Console.ResetColor();
         }
 
         public bool AddProduct(string productName, string quantityPerUnit, decimal unitPrice, short unitsInStock, short unitsOnOrder, short reorderLevel, bool discontinued, int categoryId)
@@ -193,6 +207,7 @@ namespace Northwind_Console.Model
 
             if (!categories.Any())
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("No categories found.");
                 return;
             }

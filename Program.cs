@@ -17,6 +17,8 @@ try
 {
     var db = new NWContext();
     string choice;
+    Console.ForegroundColor = ConsoleColor.White;
+
     do
     {
         Console.WriteLine("1) Display Categories");
@@ -30,10 +32,15 @@ try
         Console.WriteLine("9) Add Product");
         Console.WriteLine("10) Edit Product");
         Console.WriteLine("11) Delete Product");
+        Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.WriteLine("\"q\" to quit");
+        Console.ForegroundColor = ConsoleColor.White;
         choice = Console.ReadLine();
         Console.Clear();
         logger.Info($"Option {choice} selected");
+
+        Console.ResetColor();
+
         if (choice == "1")
         {
             var query = db.Categories.OrderBy(p => p.CategoryName);
@@ -51,6 +58,7 @@ try
         else if (choice == "2")
         {
             Category category = new Category();
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.WriteLine("Enter Category Name:");
             category.CategoryName = Console.ReadLine();
             Console.WriteLine("Enter the Category Description:");
@@ -85,6 +93,7 @@ try
                     logger.Error($"{result.MemberNames.First()} : {result.ErrorMessage}");
                 }
             }
+            Console.ResetColor();
             continue;
         }
         else if (choice == "3")
@@ -106,7 +115,7 @@ try
             // category.Description = Console.ReadLine();
             // db.SaveChanges();
 
-
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("Select the category you want to edit:");
             var query = db.Categories.OrderBy(p => p.CategoryId);
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -207,6 +216,7 @@ try
 
             if (product == null || !product.Any())
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("No records found");
             }
             else
@@ -234,6 +244,7 @@ try
 
             else
             {
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Enter the Product Quantity Per Unit:");
                 string quantityPerUnit = Console.ReadLine();
                 Console.WriteLine("Enter the Product Unit Price:");
@@ -247,6 +258,8 @@ try
                 Console.WriteLine("Is the Product Discontinued? (y/n)");
                 bool discontinued = Console.ReadLine().ToLower() == "y";
 
+
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Select the Category for the Product:");
                 var query = db.Categories.OrderBy(p => p.CategoryId);
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -263,6 +276,7 @@ try
                     logger.Info("Product added - {ProductName}", productName);
                 }
             }
+            Console.ResetColor();
             continue;
         }
         else if (choice == "10")
@@ -278,6 +292,7 @@ try
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Enter the Product Quantity Per Unit:");
                 string quantityPerUnit = Console.ReadLine();
                 Console.WriteLine("Enter the Product Unit Price:");
@@ -291,6 +306,7 @@ try
                 Console.WriteLine("Is the Product Discontinued? (y/n)");
                 bool discontinued = Console.ReadLine().ToLower() == "y";
 
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Select the Category for the Product:");
                 var query = db.Categories.OrderBy(p => p.CategoryId);
                 Console.ForegroundColor = ConsoleColor.Cyan;
