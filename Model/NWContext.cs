@@ -36,6 +36,83 @@ namespace Northwind_Console.Model
             category.CategoryName = UpdatedCategory.CategoryName;
             this.SaveChanges();
         }
+        
+        public void DeleteCategory(int categoryId)
+        {
+            Category category = this.Categories.Include(c => c.Products).FirstOrDefault(c => c.CategoryId == categoryId);
+            if (category == null)
+            {
+                Console.WriteLine("Category not found.");
+                return;
+            }
+            if (category.Products.Any())
+            {
+                Console.WriteLine("This category has related products. Please enter the ID of the category you want to reassign the products to, or enter 'delete' to delete the products:");
+
+                string input = Console.ReadLine();
+                if (input.ToLower() != "delete")
+                {
+                    int newCategoryId;
+                    if (int.TryParse(input, out newCategoryId))
+                    {
+                        Category newCategory = this.Categories.FirstOrDefault(c => c.CategoryId == newCategoryId);
+                        if (newCategory != null)
+                        {
+                            foreach (Product product in category.Products)
+                            {
+                                product.Category = newCategory;
+                            }
+                            Console.WriteLine("Products reassigned to new category.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Category not found. No changes were made.");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input. No changes were made.");
+                        return;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("You have chosen to delete the products. Are you sure? (yes/no)");
+                    string confirmation = Console.ReadLine();
+                    if (confirmation.ToLower() == "yes")
+                    {
+                        this.Products.RemoveRange(category.Products);
+                        Console.WriteLine("Products deleted.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No changes were made.");
+                        return;
+                    }
+                }
+            }
+            this.Categories.Remove(category);
+            this.SaveChanges();
+            Console.WriteLine("Category deleted successfully.");
+        }
+
+        public void DisplayCategories()
+        {
+            var categories = this.Categories.ToList();
+
+            if (!categories.Any())
+            {
+                Console.WriteLine("No categories found.");
+                return;
+            }
+
+            Console.WriteLine("Categories:");
+            foreach (var category in categories)
+            {
+                Console.WriteLine($"ID: {category.CategoryId}, Name: {category.CategoryName}, Description: {category.Description}");
+            }
+        }
 
         public bool AddProduct(string productName, string quantityPerUnit, decimal unitPrice, short unitsInStock, short unitsOnOrder, short reorderLevel, bool discontinued, int categoryId)
         {

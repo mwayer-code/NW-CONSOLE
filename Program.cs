@@ -22,12 +22,13 @@ try
         Console.WriteLine("1) Display Categories");
         Console.WriteLine("2) Add Category");
         Console.WriteLine("3) Edit Category");
-        Console.WriteLine("4) Display Category and related products");
-        Console.WriteLine("5) Display all Categories and their related products");
-        Console.WriteLine("6) Display Products");
-        Console.WriteLine("7) Search for a Product");
-        Console.WriteLine("8) Add Product");
-        Console.WriteLine("9) Edit Product");
+        Console.WriteLine("4) Delete Category");
+        Console.WriteLine("5) Display Category and related products");
+        Console.WriteLine("6) Display all Categories and their related products");
+        Console.WriteLine("7) Display Products");
+        Console.WriteLine("8) Search for a Product");
+        Console.WriteLine("9) Add Product");
+        Console.WriteLine("10) Edit Product");
         Console.WriteLine("\"q\" to quit");
         choice = Console.ReadLine();
         Console.Clear();
@@ -107,7 +108,7 @@ try
 
             Console.WriteLine("Select the category you want to edit:");
             var query = db.Categories.OrderBy(p => p.CategoryId);
-            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor = ConsoleColor.Cyan;
             foreach (var item in query)
             {
                 Console.WriteLine($"{item.CategoryId}) {item.CategoryName}");
@@ -131,10 +132,19 @@ try
         }
         else if (choice == "4")
         {
+            db.DisplayCategories();
+
+            Console.WriteLine("Select the ID you want to delete:");
+            int id = int.Parse(Console.ReadLine());
+            db.DeleteCategory(id);
+        }
+
+        else if (choice == "5")
+        {
             var query = db.Categories.OrderBy(p => p.CategoryId);
 
             Console.WriteLine("Select the category whose products you want to display:");
-            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor = ConsoleColor.Cyan;
             foreach (var item in query)
             {
                 Console.WriteLine($"{item.CategoryId}) {item.CategoryName}");
@@ -151,7 +161,7 @@ try
             }
             continue;
         }
-        else if (choice == "5")
+        else if (choice == "6")
         {
             var query = db.Categories.Include("Products").OrderBy(p => p.CategoryId);
             foreach (var item in query)
@@ -164,7 +174,7 @@ try
             }
             continue;
         }
-        else if (choice == "6")
+        else if (choice == "7")
         {
             Console.WriteLine("Which products would you like to see? (all/discontinued/active)");
             string productType = Console.ReadLine().ToLower();
@@ -195,7 +205,7 @@ try
             Console.ForegroundColor = ConsoleColor.White;
             continue;
         }
-        else if (choice == "7")
+        else if (choice == "8")
         {
             Console.WriteLine("Enter the product name:");
             string productName = Console.ReadLine();
@@ -219,7 +229,7 @@ try
             }
             continue;
         }
-        else if (choice == "8")
+        else if (choice == "9")
         {
             Console.WriteLine("Enter Product Name:");
             string productName = Console.ReadLine();
@@ -246,7 +256,7 @@ try
 
                 Console.WriteLine("Select the Category for the Product:");
                 var query = db.Categories.OrderBy(p => p.CategoryId);
-                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 foreach (var item in query)
                 {
                     Console.WriteLine($"{item.CategoryId}) {item.CategoryName}");
@@ -262,7 +272,7 @@ try
             }
             continue;
         }
-        else if (choice == "9")
+        else if (choice == "10")
         {
             Console.WriteLine("Enter the product name:");
             string productName = Console.ReadLine();
@@ -290,7 +300,7 @@ try
 
                 Console.WriteLine("Select the Category for the Product:");
                 var query = db.Categories.OrderBy(p => p.CategoryId);
-                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 foreach (var item in query)
                 {
                     Console.WriteLine($"{item.CategoryId}) {item.CategoryName}");
