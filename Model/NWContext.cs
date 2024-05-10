@@ -36,6 +36,32 @@ namespace Northwind_Console.Model
             this.SaveChanges();
         }
 
+        public bool AddProduct(string productName, string quantityPerUnit, decimal unitPrice, short unitsInStock, short unitsOnOrder, short reorderLevel, bool discontinued, int categoryId)
+        {
+            if (this.Products.Any(p => p.ProductName.ToLower() == productName.ToLower()))
+            {
+                return false;
+
+            }
+
+            Product product = new Product
+            {
+                ProductName = productName,
+                QuantityPerUnit = quantityPerUnit,
+                UnitPrice = unitPrice,
+                UnitsInStock = unitsInStock,
+                UnitsOnOrder = unitsOnOrder,
+                ReorderLevel = reorderLevel,
+                Discontinued = discontinued,
+                CategoryId = categoryId
+            };
+
+            this.Products.Add(product);
+            this.SaveChanges();
+
+            return true;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
