@@ -72,7 +72,7 @@ try
             {
                 logger.Info("Validation passed");
                  // check for unique name
-                if (db.Categories.Any(c => c.CategoryName == category.CategoryName))
+                if (!db.IsCategoryNameUnique(category.CategoryName))
                 {
                     // generate validation error
                     isValid = false;
@@ -81,8 +81,7 @@ try
                 else
                 {
                     logger.Info("Validation passed");
-                    db.Categories.Add(category);
-                    db.SaveChanges();
+                    db.AddCategory(category);
                     logger.Info("Category added - {category.CategoryName}");
                 }
             }

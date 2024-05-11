@@ -31,6 +31,16 @@ namespace Northwind_Console.Model
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<Territory> Territories { get; set; }
 
+        public void AddCategory(Category category)
+        {
+            this.Categories.Add(category);
+            this.SaveChanges();
+        }
+        public bool IsCategoryNameUnique(string categoryName)
+        {
+            return !this.Categories.Any(c => c.CategoryName.ToLower() == categoryName.ToLower());
+        }
+
         public void EditCategory(Category UpdatedCategory)
         {
             Category category = this.Categories.Find(UpdatedCategory.CategoryId);
