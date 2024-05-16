@@ -302,6 +302,9 @@ try
                 int id3 = int.Parse(Console.ReadLine());
                 db.DeleteProduct(id3);
                 break;
+            case "q":
+                logger.Info("Program ended");
+                break;
             default:
                 logger.Info("Invalid selection");
                 break;
@@ -313,8 +316,7 @@ catch (Exception ex)
 {
     logger.Error(ex.Message);
 }
-
-
-
-
-logger.Info("Program ended");
+finally
+{
+    LogManager.Shutdown();
+}
