@@ -27,7 +27,7 @@ try
         Console.WriteLine("4) Delete Category");
         Console.WriteLine("5) Display Category and related products");
         Console.WriteLine("6) Display all Categories and their related products");
-        Console.WriteLine("7) Display Products");
+        Console.WriteLine("7) Display (Active/Inactive) Products");
         Console.WriteLine("8) Search for a Product");
         Console.WriteLine("9) Add Product");
         Console.WriteLine("10) Edit Product");
@@ -123,6 +123,7 @@ try
                 Console.WriteLine("Select the ID you want to delete:");
                 int deleteId = int.Parse(Console.ReadLine());
                 db.DeleteCategory(deleteId);
+                Console.ResetColor();
                 break;
             case "5":
                 var query3 = db.Categories.OrderBy(p => p.CategoryId);
@@ -172,7 +173,7 @@ try
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 foreach (var item in products)
                 {
-                    Console.WriteLine($"{item.ProductName} - {(item.Discontinued ? "Discontinued" : "Active")}");
+                    Console.WriteLine($"ID: {item.ProductId}, Name: {item.ProductName}, Status: {(item.Discontinued ? "Discontinued" : "Active")}");
                 }
                 Console.ForegroundColor = ConsoleColor.White;
                 break;
@@ -194,7 +195,7 @@ try
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     foreach (var item in product)
                     {
-                        Console.WriteLine($"{item.ProductName} - {(item.Discontinued ? "Discontinued" : "Active")}");
+                        Console.WriteLine($"ID: {item.ProductId}, Name: {item.ProductName}, Status: {(item.Discontinued ? "Discontinued" : "Active")}");
                     }
                     Console.ForegroundColor = ConsoleColor.White;
                 }
